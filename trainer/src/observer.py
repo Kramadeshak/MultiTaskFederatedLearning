@@ -1,6 +1,7 @@
 import redis
 import json
 from logger import get_logger
+from dataset_manager import dataset_handler
 
 logger = get_logger()
 
@@ -23,14 +24,14 @@ class RequestProcessor:
             logger.info(f"Received command: {command}")
             self.route_message(command)
 
-    def route_message(self, message):
+    def route_message(self, command):
         """
         Parses messages that have been received from redis.
         """
         try:
-            data = json.loads(message)
+            data = json.loads(command)
             if data["type"] == "dataset":
-                dataset_handler(data)
+                dataset_handler(data["message"])
             else:
                 logger.warning(f"Unsupported message type: {data['type']}")
         except json.JSONDecodeError as e:
