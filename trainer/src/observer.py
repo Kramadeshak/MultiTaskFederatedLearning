@@ -1,17 +1,17 @@
 import redis
+import json
 from logger import get_logger
-from handler import handle_message
 
 logger = get_logger()
 
-class Observer:
+class RequestProcessor:
     def __init__(self, redis_host, redis_port):
         self.redis_host = redis_host
         self.redis_port = redis_port
         self.redis = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
         logger.info(f"Observer initialized with Redis at {redis_host}:{redis_port}")
 
-    def watch(self):
+    def listen(self):
         pubsub = self.redis.pubsub()
         pubsub.subscribe("trainer_commands")
         logger.info("Subscribed to 'trainer_commands' channel.")
@@ -21,4 +21,19 @@ class Observer:
                 continue
             command = message["data"]
             logger.info(f"Received command: {command}")
-            handle_message(command)
+            self.route_message(command)
+
+    def route_message(self, message):
+        """
+        Parses messages that have been received from redis.
+        """
+        try:
+            data = json.loads(message)
+            if data["type"] == "dataset":
+                dataset_handler(data)
+            else:
+                logger.warning(f"Unsupported message type: {data['type']}")
+        except json.JSONDecodeError as e:
+            logger.error(f"Invalid JSON: {e}")
+        except Exception as e:
+            logger.error(f"Error parsing message: {e}")
