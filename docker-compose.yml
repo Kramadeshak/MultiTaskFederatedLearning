@@ -7,9 +7,9 @@ services:
     ports:
       - "6379:6379"
 
-  trainer:
-    image: trainer:latest
-    container_name: trainer
+  control-plane:
+    image: control-plane:latest
+    container_name: control-plane
     depends_on:
       - redis
       # - fedsim-server

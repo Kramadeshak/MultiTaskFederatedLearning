@@ -12,14 +12,14 @@ sleep 5
 echo "***************************************************************"
 echo "Pushing message to redis"
 echo "***************************************************************"
-TRAIN_JSON=$(cat test-json/trainer_data.json)
-podman exec redis redis-cli PUBLISH trainer_commands $TRAIN_JSON
+TRAIN_JSON=$(cat test-json/dataset-command.json)
+podman exec redis redis-cli PUBLISH commands $TRAIN_JSON
 echo "Messaged pushed to redis"
 
 echo "***************************************************************"
-echo "Printing trainer logs"
+echo "Printing control-plane logs"
 echo "***************************************************************"
-podman logs -f trainer
+podman logs -f control-plane
 
 echo "***************************************************************"
 echo "Bringing down all the containers"

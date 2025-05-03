@@ -1,10 +1,10 @@
 #!/bin/sh
 
 echo "***************************************************************"
-echo "Building trainer image"
+echo "Building control-plane image"
 echo "***************************************************************"
 
-podman build -f ./trainer/Dockerfile -t trainer:latest ./trainer/
-echo "trainer image built successfully"
+podman build -f ./control-plane/Dockerfile -t control-plane:latest ./control-plane/
+echo "control-plane image built successfully"
 
 
