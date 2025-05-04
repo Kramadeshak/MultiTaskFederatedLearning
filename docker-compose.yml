@@ -12,22 +12,22 @@ services:
     container_name: control-plane
     depends_on:
       - redis
-      # - fedsim-server
+      - fedsim-server
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
 
-  #  fedsim-server:
-  #    image: fedsim-server:latest
-  #    container_name: fedsim-server
-  #    depends_on:
-  #      - redis
-  #    environment:
-  #      - REDIS_HOST=redis
-  #      - REDIS_PORT=6379
-  #      - FEDSIM_SERVER_HOST=fedsim-server
-  #      - FEDSIM_SERVER_PORT=5000
-  #
+  fedsim-server:
+    image: fedsim-server:latest
+    container_name: fedsim-server
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - FEDSIM_SERVER_HOST=fedsim-server
+      - FEDSIM_SERVER_PORT=5000
+
   #  fedsim-client:
   #    image: fedsim-client:latest
   #    container_name: fedsim-client
