@@ -1,0 +1,1 @@
+{"type":"dataset","message":{"dataset":"MNIST","repo_id":"ylecun/mnist","train_file":"mnist/train-00000-of-00001.parquet","test_file":"mnist/test-00000-of-00001.parquet","iid":"true","num_clients":10}}
