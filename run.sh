@@ -5,7 +5,7 @@
 echo "***************************************************************"
 echo "Bringing up all the containers"
 echo "***************************************************************"
-podman-compose up -d
+docker-compose up -d
 echo "Waiting for the containers to be up"
 sleep 5
 
@@ -13,15 +13,15 @@ echo "***************************************************************"
 echo "Pushing message to redis"
 echo "***************************************************************"
 TRAIN_JSON=$(cat test-json/dataset-command.json)
-podman exec redis redis-cli PUBLISH commands $TRAIN_JSON
+docker exec redis redis-cli PUBLISH commands $TRAIN_JSON
 echo "Messaged pushed to redis"
 
 echo "***************************************************************"
 echo "Printing control-plane logs"
 echo "***************************************************************"
-podman logs -f control-plane
+docker logs -f control-plane
 
 echo "***************************************************************"
 echo "Bringing down all the containers"
 echo "***************************************************************"
-podman-compose down -v
+docker-compose down -v
