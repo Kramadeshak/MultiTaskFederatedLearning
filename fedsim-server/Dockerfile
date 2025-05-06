@@ -8,6 +8,8 @@ COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir --prefer-binary -r requirements.txt
 
+RUN pip3 install --no-cache-dir --prefer-binary numpy
+
 RUN apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
