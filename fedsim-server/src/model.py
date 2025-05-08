@@ -161,6 +161,14 @@ class MNISTModel(FLModel):
     def calc_acc(self, logits, y):
         return (torch.argmax(logits, dim=1) == y).float().mean()
 
+    def empty_step(self):
+        self.train_step(torch.zeros((2, 784), 
+                                    device=self.device, 
+                                    dtype=torch.float32), 
+                        torch.zeros((2), 
+                                    device=self.device,
+                                    dtype=torch.int32).long())
+
 class NumpyModel():
     
     def __init__(self, params):
