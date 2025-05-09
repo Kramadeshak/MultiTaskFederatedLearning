@@ -15,3 +15,10 @@ docker build -f ./fedsim-server/Dockerfile -t fedsim-server:latest ./fedsim-serv
 echo "fedsim-server image built successfully"
 
 
+echo "***************************************************************"
+echo "Building fedsim-client image"
+echo "***************************************************************"
+
+docker build -f ./fedsim-client/Dockerfile -t fedsim-client:latest ./fedsim-client/
+echo "fedsim-client image built successfully"
+
