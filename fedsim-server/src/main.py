@@ -30,6 +30,7 @@ def main():
             print(f"[INFO] Connected by {addr}")
             # First, send the length of the payload
             conn.sendall(len(serialized_params).to_bytes(8, byteorder='big'))
+            print(f"sent {len(serialized_params)}")
             # Then, send the actual payload
             conn.sendall(serialized_params)
             print("[INFO] Parameters sent.")
