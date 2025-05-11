@@ -8,6 +8,13 @@ docker build -f ./control-plane/Dockerfile -t control-plane:latest ./control-pla
 echo "control-plane image built successfully"
 
 echo "***************************************************************"
+echo "Building fedsim base image"
+echo "***************************************************************"
+
+docker build -f Dockerfile -t fedism:latest .
+echo "fedsim image built successfully"
+
+echo "***************************************************************"
 echo "Building fedsim-server image"
 echo "***************************************************************"
 
