@@ -2,6 +2,7 @@ import redis
 import json
 from logger import get_logger
 from dataset_manager import dataset_handler
+from client import data_streamer
 
 logger = get_logger()
 
@@ -32,6 +33,8 @@ class RequestProcessor:
             data = json.loads(command)
             if data["type"] == "dataset":
                 dataset_handler(data["message"])
+            elif data["type"] == "stream":
+                data_streamer(data["message"], self.redis)
             else:
                 logger.warning(f"Unsupported message type: {data['type']}")
         except json.JSONDecodeError as e:
