@@ -1,7 +1,7 @@
 import os
 import threading
 import time
-import json
+import pickle
 import numpy as np
 from dataset_manager import dataset_handler
 from logger import get_logger
@@ -41,7 +41,7 @@ class DataStreamer:
         logger.info(f"Streaming {len(X)} samples to {key}...")
 
         for i in range(len(X)):
-            payload = json.dumps({
+            payload = pickle.dumps({
                 "image": X[i].tolist(),
                 "label": int(Y[i])
             })
