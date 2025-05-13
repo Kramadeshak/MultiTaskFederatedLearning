@@ -10,7 +10,6 @@ logger = get_logger()
 
 class DataStreamer:
     def __init__(self, raw_data, redis_client):
-        self.raw_data = raw_data
         self.redis = redis_client
         self.dataset = raw_data["dataset"].lower()
         self.num_clients = int(raw_data["num_clients"])
