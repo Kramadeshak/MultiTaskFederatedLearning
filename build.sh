@@ -11,7 +11,7 @@ echo "***************************************************************"
 echo "Building fedsim base image"
 echo "***************************************************************"
 
-docker build -f Dockerfile -t fedism:latest .
+docker build -f Dockerfile -t fedsim:latest .
 echo "fedsim image built successfully"
 
 echo "***************************************************************"
