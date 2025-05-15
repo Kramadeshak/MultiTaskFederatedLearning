@@ -24,7 +24,7 @@ class Client:
             length_data += part
         total_length = int.from_bytes(length_data, byteorder='big')
         print(f"[Client {self.client_id}] Expecting {total_length} bytes")
-        
+
         data = b""
         while len(data) < total_length:
             part = sock.recv(min(BUFFER_SIZE, total_length - len(data)))
