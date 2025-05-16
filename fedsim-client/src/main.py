@@ -11,7 +11,7 @@ def client_worker(client_id):
 def main():
     print("[Main] Starting fedsim-client")
     time.sleep(5)
-    num_clients = int(os.getenv("NUM_CLIENTS", 1))
+    num_clients = int(os.getenv("NUM_CLIENTS", 10))
     threads = []
 
     for i in range(num_clients):
