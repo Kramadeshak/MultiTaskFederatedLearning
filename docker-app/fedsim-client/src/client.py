@@ -2,6 +2,7 @@ import socket
 import pickle
 import torch
 import time
+import redis
 from model import MNISTModel
 
 SERVER_HOST = 'fedsim-server'
@@ -13,6 +14,7 @@ class Client:
         self.client_id = client_id
         self.device = torch.device("cpu")
         self.model = MNISTModel(self.device)
+        self.redis = redis.Redis(host='redis', port=6379, decode_responses=False)
 
     def receive_all(self, sock):
         """Receive all data from the socket after reading 8-byte length prefix."""
@@ -52,5 +54,19 @@ class Client:
 
     def observe_redis_cache(self):
         print(f"[Client {self.client_id}] Observing Redis cache for new data...")
-        # Placeholder for Redis logic
-        time.sleep(5)
+        key = f"client{self.client_id}"
+
+        while True:
+            item = self.redis.lpop(key)
+            if item is None:
+                print(f"[Client {self.client_id}] No more data. Waiting...")
+                time.sleep(1)
+                continue
+
+            try:
+                data = pickle.loads(item)
+                image = np.array(data["image"])
+                label = data["label"]
+                print(f"[Client {self.client_id}] Received sample with label {label}, shape {image.shape}")
+            except Exception as e:
+                print(f"[Client {self.client_id}] Error decoding data: {e}")
