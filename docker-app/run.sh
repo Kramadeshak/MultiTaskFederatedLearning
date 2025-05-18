@@ -27,6 +27,13 @@ echo "***************************************************************"
 docker logs -f fedsim-server
 
 echo "***************************************************************"
+echo "Pushing message to redis"
+echo "***************************************************************"
+SEND_JSON=$(cat test-json/stream-command.json)
+docker exec redis redis-cli PUBLISH commands $SEND_JSON
+echo "Messaged pushed to redis"
+
+echo "***************************************************************"
 echo "Printing fedsim-client logs"
 echo "***************************************************************"
 docker logs -f fedsim-client
