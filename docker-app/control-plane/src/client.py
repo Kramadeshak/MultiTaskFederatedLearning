@@ -34,8 +34,8 @@ class DataStreamer:
         x_path = os.path.join(self.base_dir, f"client_{client_id}_X.npy")
         y_path = os.path.join(self.base_dir, f"client_{client_id}_y.npy")
 
-        X = np.load(x_path)
-        Y = np.load(y_path)
+        X = np.load(x_path, allow_pickle=True)
+        Y = np.load(y_path, allow_pickle=True)
 
         logger.info(f"Streaming {len(X)} samples to {key}...")
 
@@ -47,6 +47,10 @@ class DataStreamer:
             self.redis.rpush(key, payload)
             logger.debug(f"Pushed sample {i} to {key}")
             time.sleep(0.1)  # Optional throttle
+        payload - pickle.dumps({
+            "label": -222
+        })
+        self.redis.rpush(key, payload)
 
         logger.info(f"Completed streaming to {key}")
 

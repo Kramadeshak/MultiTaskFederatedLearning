@@ -3,6 +3,7 @@ import pickle
 import torch
 import time
 import redis
+import numpy as np
 from model import MNISTModel
 
 SERVER_HOST = 'fedsim-server'
@@ -52,21 +53,33 @@ class Client:
             print(f"[Client {self.client_id}] Loaded model with {len(model_params.params)} params")
             self.model.set_params(model_params.params)
 
+
     def observe_redis_cache(self):
         print(f"[Client {self.client_id}] Observing Redis cache for new data...")
         key = f"client{self.client_id}"
-
         while True:
             item = self.redis.lpop(key)
             if item is None:
-                print(f"[Client {self.client_id}] No more data. Waiting...")
+                # print(f"[Client {self.client_id}] No more data. Waiting...")
                 time.sleep(1)
                 continue
-
             try:
                 data = pickle.loads(item)
-                image = np.array(data["image"])
+                if data["label"] == -222:
+                    break
+                image = np.array(data["image"], dtype=np.float32)
                 label = data["label"]
                 print(f"[Client {self.client_id}] Received sample with label {label}, shape {image.shape}")
+
+                x = torch.tensor(image).unsqueeze(0)  # add batch dimension
+                y = torch.tensor([label], dtype=torch.long)
+
+                if x.max() > 1.0:
+                    x = x / 255.0
+
+                err, acc = self.model.train_step(x, y)
+                print(f"[Client {self.client_id}] Trained on sample: err={err:.4f}, acc={acc:.4f}")
+
             except Exception as e:
-                print(f"[Client {self.client_id}] Error decoding data: {e}")
+                print(f"[Client {self.client_id}] Error decoding or training on data: {e}")
+        print("Trained all data")
