@@ -24,6 +24,7 @@ class RequestProcessor:
             command = message["data"]
             logger.info(f"Received command: {command}")
             self.route_message(command)
+            logger.info("Command executed")
 
     def route_message(self, command):
         """
