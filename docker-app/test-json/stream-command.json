@@ -1,1 +1,1 @@
-{"type":"stream","message":{"dataset": "MNIST","num_clients": 10}}
+{"type":"stream","message":{"dataset":"MNIST","num_clients":10}}
