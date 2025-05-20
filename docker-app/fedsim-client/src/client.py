@@ -4,11 +4,18 @@ import torch
 import time
 import redis
 import numpy as np
+from PIL import Image
+import io
 from model import MNISTModel
 
 SERVER_HOST = 'fedsim-server'
 SERVER_PORT = 8080
 BUFFER_SIZE = 4096
+
+def decode_image(image_info):
+    img_bytes = image_info[0]["bytes"]
+    image_pil = Image.open(io.BytesIO(img_bytes)).convert("L")
+    return np.array(image_pil, dtype=np.float32) / 255.0
 
 class Client:
     def __init__(self, client_id: int):
@@ -67,15 +74,12 @@ class Client:
                 data = pickle.loads(item)
                 if data["label"] == -222:
                     break
-                image = np.array(data["image"], dtype=np.float32)
+                image = decode_image(data["image"])
                 label = data["label"]
                 print(f"[Client {self.client_id}] Received sample with label {label}, shape {image.shape}")
 
-                x = torch.tensor(image).unsqueeze(0)  # add batch dimension
+                x = torch.tensor(image).view(1, -1)
                 y = torch.tensor([label], dtype=torch.long)
-
-                if x.max() > 1.0:
-                    x = x / 255.0
 
                 err, acc = self.model.train_step(x, y)
                 print(f"[Client {self.client_id}] Trained on sample: err={err:.4f}, acc={acc:.4f}")
