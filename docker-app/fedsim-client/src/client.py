@@ -14,7 +14,7 @@ BUFFER_SIZE = 4096
 
 def decode_image(image_info):
     img_bytes = image_info[0]["bytes"]
-    image_pil = Image.open(io.BytesIO(img_bytes)).convert("L")
+    image_pil = Image.open(io.BytesIO(img_bytes)).convert("L").resize((28, 28))
     return np.array(image_pil, dtype=np.float32) / 255.0
 
 class Client:
@@ -61,13 +61,13 @@ class Client:
             self.model.set_params(model_params.params)
 
 
-    def observe_redis_cache(self):
+    def observe_redis_cache(self, batch_size=4):
         print(f"[Client {self.client_id}] Observing Redis cache for new data...")
         key = f"client{self.client_id}"
+        x_batch, y_batch = [], []
         while True:
             item = self.redis.lpop(key)
             if item is None:
-                # print(f"[Client {self.client_id}] No more data. Waiting...")
                 time.sleep(1)
                 continue
             try:
@@ -78,11 +78,17 @@ class Client:
                 label = data["label"]
                 print(f"[Client {self.client_id}] Received sample with label {label}, shape {image.shape}")
 
-                x = torch.tensor(image).view(1, -1)
-                y = torch.tensor([label], dtype=torch.long)
+                x_batch.append(image.flatten())  # Flatten to [784]
+                y_batch.append(label)
 
-                err, acc = self.model.train_step(x, y)
-                print(f"[Client {self.client_id}] Trained on sample: err={err:.4f}, acc={acc:.4f}")
+                # If batch is full, train
+                if len(x_batch) >= batch_size:
+                    # x = torch.tensor(x_batch, dtype=torch.float32).view(batch_size, -1)
+                    x = torch.tensor(x_batch, dtype=torch.float32).view(batch_size, -1)
+                    y = torch.tensor(y_batch, dtype=torch.long)
+                    err, acc = self.model.train_step(x, y)
+                    print(f"[Client {self.client_id}] Trained on batch: err={err:.4f}, acc={acc:.4f}")
+                    x_batch, y_batch = [], []
 
             except Exception as e:
                 print(f"[Client {self.client_id}] Error decoding or training on data: {e}")
