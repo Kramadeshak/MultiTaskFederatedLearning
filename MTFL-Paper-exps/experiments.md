@@ -198,3 +198,70 @@ server_lr = 0.01
 **Results pickle file: ** = dset-mnist_alg-fedadam_C-0.5_B-20_T-300_E-1_device-cpu_W-200_seed-0_lr-0.3_noisy_frac-0.0_bn_private-yb_server_lr-0.01_beta1-0.9_beta2-0.999_epsilon-0.0001.pkl
 
 `python main.py -dset mnist -alg fedadam -C 0.5 -B 20 -T 300 -E 1 -device cpu -W 200 -seed 0 -lr 0.3 -noisy_frac 0.0 -bn_private yb -beta1 0.9 -beta2 0.999 -epsilon 1e-4 -server_lr 0.01`
+
+### Experiment:4A (FedAvg, Private us, C = 0.5, W = 200, Strategy = MTFL)
+Strategy = MTFL
+Dataset (dset) = MNIST
+Clients (W) = 200
+Sampled (C) = 0.5
+Total communication rounds (T) = 300
+Learning rate (lr) = 0.3
+Random noise added to fraction of clients (noisy_frac) = 0.0
+Private batchnorm parameters (bn_private) = us
+Algorithm (alg) = fedavg
+device = GPU
+seed = 0
+Client batch size (B) = 20
+Client num epochs (E) = 1
+
+**Execution time: ** = 26 mins
+**Results pickle file: ** = dset-mnist_alg-fedavg_C-0.5_B-20_T-300_E-1_device-gpu_W-200_seed-0_lr-0.3_noisy_frac-0.0_bn_private-us.pkl
+
+`python main.py -dset mnist -alg fedavg -C 0.5 -B 20 -T 300 -E 1 -device gpu -W 200 -seed 0 -lr 0.3 -noisy_frac 0.0 -bn_private us`
+
+### Experiment:4B (FedAvg-Adam, Private us, C = 0.5, W = 200, Strategy = MTFL)
+Strategy = MTFL
+Dataset (dset) = MNIST
+Clients (W) = 200
+Sampled (C) = 0.5
+Total communication rounds (T) = 300
+Learning rate (lr) = 0.003
+Random noise added to fraction of clients (noisy_frac) = 0.0
+Private batchnorm parameters (bn_private) = us
+Algorithm (alg) = fedavg-adam
+device = CPU
+seed = 0
+Client batch size (B) = 20
+Client num epochs (E) = 1
+beta1 = 0.9
+beta2 = 0.999
+epsilon = 1e-7
+
+**Execution time: ** = 19 mins
+**Results pickle file: ** = dset-mnist_alg-fedavg-adam_C-0.5_B-20_T-300_E-1_device-cpu_W-200_seed-0_lr-0.003_noisy_frac-0.0_bn_private-us_beta1-0.9_beta2-0.999_epsilon-1e-07.pkl
+
+`python main.py -dset mnist -alg fedavg-adam -C 0.5 -B 20 -T 300 -E 1 -device cpu -W 200 -seed 0 -lr 0.003 -noisy_frac 0.0 -bn_private us -beta1 0.9 -beta2 0.999 -epsilon 1e-7`
+
+### Experiment:4C (FedAdam, Private us, C = 0.5, W = 200, Strategy = MTFL)
+Strategy = MTFL
+Dataset (dset) = MNIST
+Clients (W) = 200
+Sampled (C) = 0.5
+Total communication rounds (T) = 300
+Learning rate (lr) = 0.3
+Random noise added to fraction of clients (noisy_frac) = 0.0
+Private batchnorm parameters (bn_private) = us
+Algorithm (alg) = fedadam
+device = CPU
+seed = 0
+Client batch size (B) = 20
+Client num epochs (E) = 1
+beta1 = 0.9
+beta2 = 0.999
+epsilon = 1e-4
+server_lr = 0.01
+
+**Execution time: ** = 30 mins
+**Results pickle file: ** = dset-mnist_alg-fedadam_C-0.5_B-20_T-300_E-1_device-cpu_W-200_seed-0_lr-0.3_noisy_frac-0.0_bn_private-us_server_lr-0.01_beta1-0.9_beta2-0.999_epsilon-0.0001.pkl
+
+`python main.py -dset mnist -alg fedadam -C 0.5 -B 20 -T 300 -E 1 -device cpu -W 200 -seed 0 -lr 0.3 -noisy_frac 0.0 -bn_private us -beta1 0.9 -beta2 0.999 -epsilon 1e-4 -server_lr 0.01`
