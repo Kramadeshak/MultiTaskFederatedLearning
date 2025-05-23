@@ -1,3 +1,6 @@
+
+[LINK TO PRESENTATION](https://docs.google.com/presentation/d/1vfwNqKFygIGigWbXPIDg9N_tnA0vYe0oKv9sF4LdSPU/edit?usp=sharing)
+
 # FL-MTFL: Multi-Task Federated Learning for CIFAR-10
 
 This repository implements Multi-Task Federated Learning (MTFL) with private batch normalization layers as described in the paper [Multi-Task Federated Learning for Personalised Deep Neural Networks in Edge Computing](https://arxiv.org/abs/2007.09236) by Mills et al.
